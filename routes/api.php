@@ -17,5 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/login', 'API\UserController@register');
+Route::post('/register', 'API\UserController@register');
+Route::post('/login', 'API\UserController@login');
+Route::get('/getcoupons', 'API\PromocodeController@index');
+Route::post('/createcoupon','API\PromocodeController@create');
+Route::post('/usecoupon','API\PromocodeController@useCoupon');
+Route::get('/banners','API\BannerController@index');
+Route::post('/createshopkeeper','API\ShopkeeperController@store');
 //Route::get('articles','ArticleContoller@index');
