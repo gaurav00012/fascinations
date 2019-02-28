@@ -25,4 +25,6 @@ class BannerController extends Controller
         //return $bannerArray;
         //print_r (json_encode($bannerArray));
     }
+
+    
 }

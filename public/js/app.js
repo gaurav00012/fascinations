@@ -1821,7 +1821,52 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-/* harmony default export */ __webpack_exports__["default"] = ({});
+//
+/* harmony default export */ __webpack_exports__["default"] = ({
+  data: function data() {
+    return {
+      image: ''
+    };
+  },
+  methods: {
+    onFileChange: function onFileChange(e) {
+      console.log(e.target.files[0]);
+      this.image = e.target.files[0];
+    },
+    formSubmit: function formSubmit(e) {
+      alert("submited");
+      e.preventDefault();
+      var currentObj = this;
+      var config = {
+        headers: {
+          'content-type': 'multipart/form-data'
+        }
+      };
+      var formData = new FormData();
+      formData.append('image', this.image);
+      axios.post('/api/uploadbanner', formData, config).then(function (response) {
+        currentObj.success = response.data.success;
+        alert('Banner uploaded succesfully');
+        this.image = '';
+      }).catch(function (error) {
+        currentObj.output = error;
+      });
+    } // createImage(file) {
+    //     let reader = new FileReader();
+    //     let vm = this;
+    //     reader.onload = (e) => {
+    //         vm.image = e.target.result;
+    //     };
+    //      reader.readAsDataURL(file);
+    // },
+    //   upload(){
+    //     alert("hey this is alert");
+    //           axios.post('/api/uploadbanner',{image: this.image}).then(response => {
+    //           });
+    //       }
+
+  }
+});
 
 /***/ }),
 
@@ -1834,6 +1879,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1977,11 +2034,17 @@ __webpack_require__.r(__webpack_exports__);
   },
   methods: {
     savecoupon: function savecoupon() {
-      axios.post('/api/createcoupon', this.coupon).then(function (respononse) {
-        return console.log(response);
+      var _this = this;
+
+      // axios.post('/api/createcoupon',this.coupon).then((respononse)=> console.log(response))
+      // .catch((error)=> console.log(respononse.data.error))
+      axios.post('/api/createcoupon', this.coupon).then(function (response) {//alert('this is submit');
       }).catch(function (error) {
-        return console.log(respononse.data.error);
-      });
+        if (error.response.status === 422) {
+          _this.errors = error.response.data.errors || {};
+          console.log(errors);
+        }
+      }); // alert('hye submmit kdf');
     }
   }
 });
@@ -2055,6 +2118,11 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2064,17 +2132,23 @@ __webpack_require__.r(__webpack_exports__);
         mobileno: '',
         username: '',
         password: ''
-      }
+      },
+      errors: {}
     };
   },
   methods: {
     click: function click() {
+      var _this = this;
+
       var shopdetail = this.shopkeeper;
       console.log(shopdetail);
       axios.post('/api/createshopkeeper', shopdetail).then(function (resp) {
         console.log(resp);
-      }).catch(function (resp) {
-        console.log(resp); //alert("Could not create your company");
+      }).catch(function (error) {
+        if (error.response.status === 422) {
+          // swal ( "Oops" ,  "Something went wrong!" ,  "error" )
+          _this.errors = error.response.data.errors || {};
+        }
       });
     }
   }
@@ -37112,26 +37186,18 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("section", { staticClass: "content-header" }, [
-        _c("h1", [
-          _vm._v(
-            "\r\n                Manage Banners\r\n               \r\n            "
-          )
-        ]),
-        _vm._v(" "),
-        _c("br")
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "col-md-6" }, [
-        _c("form", { staticClass: "form-horizontal" }, [
+  return _c("div", [
+    _vm._m(0),
+    _vm._v(" "),
+    _c("div", { staticClass: "col-md-6" }, [
+      _c(
+        "form",
+        {
+          staticClass: "form-horizontal",
+          attrs: { enctype: "multipart/form-data" },
+          on: { submit: _vm.formSubmit }
+        },
+        [
           _c("div", { staticClass: "form-group" }, [
             _c(
               "label",
@@ -37145,45 +37211,40 @@ var staticRenderFns = [
             _c("div", { staticClass: "col-sm-10" }, [
               _c("input", {
                 staticClass: "form-control",
-                attrs: { type: "file", id: "inputPassword3" }
+                attrs: { type: "file", id: "inputPassword3" },
+                on: { change: _vm.onFileChange }
               })
             ])
           ]),
           _vm._v(" "),
-          _c("div", { staticClass: "form-group" }, [
-            _c(
-              "label",
-              {
-                staticClass: "col-sm-2 control-label",
-                attrs: { for: "inputPassword3" }
-              },
-              [_vm._v("Status")]
-            ),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-sm-10" }, [
-              _c("select", [
-                _c("option", { attrs: { value: "Active" } }, [
-                  _vm._v("Active")
-                ]),
-                _vm._v(" "),
-                _c("option", { attrs: { value: "Not Active" } }, [
-                  _vm._v("Not Active")
-                ])
-              ])
-            ])
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "col-md-6" }, [
-            _c(
-              "button",
-              {
-                staticClass: "btn btn-info pull-right",
-                attrs: { type: "button" }
-              },
-              [_vm._v("Submit")]
-            )
-          ])
-        ])
+          _vm._m(1)
+        ]
+      )
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "content-header" }, [
+      _c("h1", [
+        _vm._v(
+          "\r\n                Manage Banners\r\n               \r\n            "
+        )
+      ]),
+      _vm._v(" "),
+      _c("br")
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "col-md-6" }, [
+      _c("button", { staticClass: "btn btn-info pull-right" }, [
+        _vm._v("Submit")
       ])
     ])
   }
@@ -37255,13 +37316,17 @@ var render = function() {
                         _vm.$set(_vm.coupon, "from_date", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.from_date
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.from_date[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
-              _vm.errors.from_date
-                ? _c("small", [_vm._v(_vm._s(_vm.errors.from_date))])
-                : _vm._e(),
+              _vm.errors.from_date ? _c("small") : _vm._e(),
               _vm._v(" "),
               _c("div", { staticClass: "form-group" }, [
                 _c(
@@ -37299,7 +37364,13 @@ var render = function() {
                         _vm.$set(_vm.coupon, "to_date", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.to_date
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.to_date[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37334,7 +37405,13 @@ var render = function() {
                         _vm.$set(_vm.coupon, "coupon_code", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_code
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_code[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37390,7 +37467,13 @@ var render = function() {
                         _vm._v(" PERCENTAGE ")
                       ])
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_type
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_type[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37433,7 +37516,13 @@ var render = function() {
                         return _vm.$forceUpdate()
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_value
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_value[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37476,7 +37565,13 @@ var render = function() {
                         return _vm.$forceUpdate()
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_min_value
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_min_value[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37519,7 +37614,13 @@ var render = function() {
                         return _vm.$forceUpdate()
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_max_value
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_max_value[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37562,7 +37663,13 @@ var render = function() {
                         return _vm.$forceUpdate()
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_limit
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_limit[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37618,7 +37725,13 @@ var render = function() {
                         _vm._v(" Product ")
                       ])
                     ]
-                  )
+                  ),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.coupon_for
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.coupon_for[0]))
+                      ])
+                    : _vm._e()
                 ])
               ]),
               _vm._v(" "),
@@ -37662,7 +37775,13 @@ var render = function() {
                             return _vm.$forceUpdate()
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _vm.errors && _vm.errors.product_name
+                        ? _c("div", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.product_name[0]))
+                          ])
+                        : _vm._e()
                     ])
                   ])
                 : _vm._e(),
@@ -37707,7 +37826,13 @@ var render = function() {
                             return _vm.$forceUpdate()
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _vm.errors && _vm.errors.product_link
+                        ? _c("div", { staticClass: "text-danger" }, [
+                            _vm._v(_vm._s(_vm.errors.product_link[0]))
+                          ])
+                        : _vm._e()
                     ])
                   ])
                 : _vm._e(),
@@ -37743,7 +37868,13 @@ var render = function() {
                         _vm.$set(_vm.coupon, "comments", $event.target.value)
                       }
                     }
-                  })
+                  }),
+                  _vm._v(" "),
+                  _vm.errors && _vm.errors.comments
+                    ? _c("div", { staticClass: "text-danger" }, [
+                        _vm._v(_vm._s(_vm.errors.comments[0]))
+                      ])
+                    : _vm._e()
                 ])
               ])
             ]),
@@ -37837,7 +37968,13 @@ var render = function() {
                   _vm.$set(_vm.shopkeeper, "storename", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.storename
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.storename[0]))
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -37872,7 +38009,13 @@ var render = function() {
                   _vm.$set(_vm.shopkeeper, "emailid", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.emailid
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.emailid[0]))
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -37907,7 +38050,13 @@ var render = function() {
                   _vm.$set(_vm.shopkeeper, "mobileno", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.mobileno
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.mobileno[0]))
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -37942,7 +38091,13 @@ var render = function() {
                   _vm.$set(_vm.shopkeeper, "username", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.username
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.username[0]))
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -37977,7 +38132,13 @@ var render = function() {
                   _vm.$set(_vm.shopkeeper, "password", $event.target.value)
                 }
               }
-            })
+            }),
+            _vm._v(" "),
+            _vm.errors && _vm.errors.password
+              ? _c("div", { staticClass: "text-danger" }, [
+                  _vm._v(_vm._s(_vm.errors.password[0]))
+                ])
+              : _vm._e()
           ])
         ]),
         _vm._v(" "),
@@ -38231,7 +38392,7 @@ var render = function() {
                   [
                     _c("i", { staticClass: "fa fa-user" }),
                     _vm._v(" "),
-                    _c("span", [_vm._v("Add ShopKeeper")]),
+                    _c("span", [_vm._v("Add Store Admin")]),
                     _vm._v(" "),
                     _c("span", { staticClass: "pull-right-container" })
                   ]

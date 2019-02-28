@@ -104,7 +104,7 @@
                 </li>
                   <li>
                 <router-link to="/admin/create-shopkeeper">
-                    <i class="fa fa-user"></i> <span>Add ShopKeeper</span>
+                    <i class="fa fa-user"></i> <span>Add Store Admin</span>
                     <span class="pull-right-container">
                     
                     </span>

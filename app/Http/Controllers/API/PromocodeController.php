@@ -38,7 +38,7 @@ class PromocodeController extends Controller
      */
     public function create(Request $request)
     {
-       $validator = Validator::make($request->all(),[
+      $this->validate($request,[
         'from_date' => 'required|date',
         'to_date' => 'required|date',
         'coupon_code' => 'required|unique:Promocodes',
@@ -54,9 +54,9 @@ class PromocodeController extends Controller
         //'created_by' => 'required'
        ]);
 
-       if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);            
-        }
+    //    if ($validator->fails()) {
+    //         return response()->json(['error'=>$validator->errors()], 422);            
+    //     }
 
         $couponInput = $request->all();
         $createCoupon = promocode::create($couponInput);

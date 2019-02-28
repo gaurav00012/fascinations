@@ -41,16 +41,14 @@ class ShopkeeperController extends Controller
     public function store(Request $request)
     {
         
-        $validator = Validator::make($request->all(),[
+       $this->validate($request,[
            'storename' => 'required',
            'emailid' => 'required|email',
            'mobileno' => 'required',
            'username' => 'required',
            'password' => 'required',
         ]);
-        if ($validator->fails()) {
-            return response()->json(['error'=>$validator->errors()], 401);            
-        }
+       
         $input = $request->all();
         $user['first_name'] = 'gauav';
         $user['last_name'] = 'aggatwa';

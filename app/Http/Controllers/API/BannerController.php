@@ -4,8 +4,10 @@ namespace App\Http\Controllers\API;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Banner as Banner;
+use Illuminate\Http\UploadFile;
+use App\Banner;
 
+use Carbon\Carbon;
 class BannerController extends Controller
 {
     public $successStatus = 200;
@@ -24,4 +26,20 @@ class BannerController extends Controller
         return response()->json(['success'=>$url,$this->successStatus]);
         //print_r (json_encode($bannerArray));
     }
-}
+    public function uploadBanner(Request $request){
+        $this->validate($request,[
+            'image' => 'required',
+        ]);
+        
+        $imageName = time().'.'.$request->image->getClientOriginalExtension();
+        $request->image->move(public_path('images/banner'), $imageName);
+        $banner = new Banner();
+        $banner->banner_url = $imageName;
+        $banner->active_status = 1;
+        $banner->save();
+    	return response()->json(['success'=>'You have successfully upload image.']);
+       
+        
+     
+    }
+}       

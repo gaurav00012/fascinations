@@ -23,5 +23,6 @@ Route::get('/getcoupons', 'API\PromocodeController@index');
 Route::post('/createcoupon','API\PromocodeController@create');
 Route::post('/usecoupon','API\PromocodeController@useCoupon');
 Route::get('/banners','API\BannerController@index');
+Route::post('/uploadbanner','API\BannerController@uploadBanner');
 Route::post('/createshopkeeper','API\ShopkeeperController@store');
 //Route::get('articles','ArticleContoller@index');

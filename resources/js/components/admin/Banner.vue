@@ -9,15 +9,16 @@
             
 </section> 
 <div class="col-md-6">
-  <form class="form-horizontal">
+  <form class="form-horizontal" @submit="formSubmit" enctype="multipart/form-data">
     <div class="form-group">
                   <label for="inputPassword3" class="col-sm-2 control-label">Upload Banner</label>
 
                   <div class="col-sm-10">
-                    <input type="file" class="form-control" id="inputPassword3" >
+                    <input type="file" v-on:change="onFileChange" class="form-control" id="inputPassword3" >
                   </div>
     </div>
-     <div class="form-group">
+    
+     <!-- <div class="form-group">
                   <label for="inputPassword3" class="col-sm-2 control-label">Status</label>
 
                   <div class="col-sm-10">
@@ -26,11 +27,11 @@
                    <option value="Not Active">Not Active</option>
                    </select>
                   </div>
-    </div>
+    </div> -->
     
      <div class="col-md-6">
                
-                <button type="button" class="btn btn-info pull-right">Submit</button>
+                <button class="btn btn-info pull-right">Submit</button>
      </div>
   </form>
 </div>
@@ -41,6 +42,54 @@
 
 <script>
 export default {
+  data(){
+    return{
+      image:''
+    }
+  },
+  methods:{
+     onFileChange(e) {
+              console.log(e.target.files[0]);
+                this.image = e.target.files[0];
+            },
+      formSubmit(e) {
+        alert("submited");
+                e.preventDefault();
+                let currentObj = this;
+ 
+                const config = {
+                    headers: { 'content-type': 'multipart/form-data' }
+                }
+ 
+                let formData = new FormData();
+                formData.append('image', this.image);
+ 
+                axios.post('/api/uploadbanner', formData, config)
+                .then(function (response) {
+                    currentObj.success = response.data.success;
+                    alert('Banner uploaded succesfully');
+                      this.image = '';
+                })
+                .catch(function (error) {
+                    currentObj.output = error;
+                  
+                });
+            }      
+      // createImage(file) {
+      //     let reader = new FileReader();
+      //     let vm = this;
+      //     reader.onload = (e) => {
+      //         vm.image = e.target.result;
+      //     };
+      //      reader.readAsDataURL(file);
+      // },
+      //   upload(){
+      //     alert("hey this is alert");
+      //           axios.post('/api/uploadbanner',{image: this.image}).then(response => {
+
+      //           });
+      //       }
+  }
 
 }
 </script>

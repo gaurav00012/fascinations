@@ -15,6 +15,7 @@
 
                   <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="shopkeeper.storename" id="storename" >
+                     <div v-if="errors && errors.storename" class="text-danger">{{errors.storename[0]}}</div>
                   </div>
     </div>
      <div class="form-group">
@@ -22,6 +23,7 @@
 
                   <div class="col-sm-10">
                     <input type="email" class="form-control" v-model="shopkeeper.emailid" id="emailid" >
+                    <div v-if="errors && errors.emailid" class="text-danger">{{errors.emailid[0]}}</div>
                   </div>
     </div>
       <div class="form-group">
@@ -29,6 +31,7 @@
 
                   <div class="col-sm-10">
                     <input type="email" class="form-control" v-model="shopkeeper.mobileno" id="mobileno" >
+                     <div v-if="errors && errors.mobileno" class="text-danger">{{errors.mobileno[0]}}</div>
                   </div>
     </div>
      <div class="form-group">
@@ -36,6 +39,7 @@
 
                   <div class="col-sm-10">
                     <input type="text" class="form-control" v-model="shopkeeper.username" id="username" >
+                    <div v-if="errors && errors.username" class="text-danger">{{errors.username[0]}}</div>
                   </div>
     </div>
      <div class="form-group">
@@ -43,6 +47,7 @@
 
                   <div class="col-sm-10">
                     <input type="password" class="form-control" v-model="shopkeeper.password" id="password" >
+                    <div v-if="errors && errors.password" class="text-danger">{{errors.password[0]}}</div>
                   </div>
     </div>
      <div class="col-md-6">
@@ -67,7 +72,8 @@ export default {
         mobileno: '',
         username: '',
         password: '',
-      }
+      },
+      errors:{},
     }
 
   },
@@ -80,10 +86,12 @@ export default {
           .then(function(resp){
             console.log(resp);
           })
-          .catch(function (resp) {
-                        console.log(resp);
-                        //alert("Could not create your company");
-                    });
+          .catch(error => {
+            if(error.response.status === 422){
+             // swal ( "Oops" ,  "Something went wrong!" ,  "error" )
+              this.errors = error.response.data.errors || {};
+            }
+          });
     }
   }
 
