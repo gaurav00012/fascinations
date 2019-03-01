@@ -19,6 +19,7 @@ import Couponcreate from './components/admin/Couponcreate.vue'
 import Createshopkeeper from './components/admin/Createshopkeeper.vue'
 import AdminRouter from './components/admin/AdminRouter'
 import Banner from './components/admin/Banner'
+import Reedemcoupon from './components/shopkeeper/Reedemcoupon'
 import Datepicker from 'vuejs-datepicker';
 
 
@@ -33,7 +34,7 @@ const routes = [
             { path: 'manage-banner', component:Banner}
         ]
     },
-    // {path : '/admim/createcoupon',component:Couponcreate}
+     {path : '/store-admin/redeem-coupon',component:Couponcreate}
 ]
 
 

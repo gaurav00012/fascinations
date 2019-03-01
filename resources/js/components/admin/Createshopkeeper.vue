@@ -62,6 +62,7 @@
 
 
 <script>
+import swal from 'sweetalert';
 export default {
 
   data(){
@@ -81,10 +82,11 @@ export default {
   methods:{
     click(){
     let shopdetail = this.shopkeeper;
-    console.log(shopdetail);
+    
     axios.post('/api/createshopkeeper',shopdetail)
           .then(function(resp){
-            console.log(resp);
+             swal("Store admin created successfully", "", "success");
+          this.shopkeeper = {};
           })
           .catch(error => {
             if(error.response.status === 422){

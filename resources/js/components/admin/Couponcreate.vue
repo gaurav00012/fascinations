@@ -133,6 +133,8 @@
 
 
 <script>
+import swal from 'sweetalert';
+
 export default {
   data(){
     return{
@@ -160,9 +162,12 @@ export default {
         // axios.post('/api/createcoupon',this.coupon).then((respononse)=> console.log(response))
         // .catch((error)=> console.log(respononse.data.error))
         axios.post('/api/createcoupon',this.coupon).then(response=>{
-          //alert('this is submit');
+          //alert('this is submit'); 
+          swal("Coupon created Successfully", "", "success");
+          this.coupon = {};
         }).catch(error=>{
           if(error.response.status === 422){
+            
             this.errors = error.response.data.errors || {};
             console.log(errors);
           }

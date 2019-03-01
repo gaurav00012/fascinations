@@ -41,6 +41,7 @@
 
 
 <script>
+import swal from 'sweetalert';
 export default {
   data(){
     return{
@@ -53,7 +54,7 @@ export default {
                 this.image = e.target.files[0];
             },
       formSubmit(e) {
-        alert("submited");
+        
                 e.preventDefault();
                 let currentObj = this;
  
@@ -67,8 +68,8 @@ export default {
                 axios.post('/api/uploadbanner', formData, config)
                 .then(function (response) {
                     currentObj.success = response.data.success;
-                    alert('Banner uploaded succesfully');
-                      this.image = '';
+                    swal("Banner uploaded successfully", "", "success");
+                      this.image = {};
                 })
                 .catch(function (error) {
                     currentObj.output = error;
